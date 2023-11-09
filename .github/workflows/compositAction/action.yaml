@@ -2,9 +2,6 @@ name: 'Composite Setup'
 description: 'Checkout and configure AWS credentials'
 
 inputs:
-  ref:
-    description: 'Git ref to checkout'
-    required: true
   aws-region:
     description: 'AWS region for configuration'
     required: true
@@ -14,8 +11,6 @@ runs:
   steps:
     - name: Checkout Repo
       uses: actions/checkout@v2
-      with:
-        ref: ${{ inputs.ref }}
     - name: config aws
       uses: aws-actions/configure-aws-credentials@v1
       with:
