@@ -1,0 +1,24 @@
+name: 'Composite Setup'
+description: 'Checkout and configure AWS credentials'
+
+inputs:
+  ref:
+    description: 'Git ref to checkout'
+    required: true
+  aws-region:
+    description: 'AWS region for configuration'
+    required: true
+
+runs:
+  using: 'composite'
+  steps:
+    - name: Checkout Repo
+      uses: actions/checkout@v2
+      with:
+        ref: ${{ inputs.ref }}
+    - name: config aws
+      uses: aws-actions/configure-aws-credentials@v1
+      with:
+        aws-access-key-id: ${{ secrets.GHUB_ACTIONS_KEY_ID }}
+        aws-secret-access-key: ${{ secrets.GHUB_ACTIONS_ACCESS_KEY }}
+        aws-region: ${{ inputs.aws-region }}
