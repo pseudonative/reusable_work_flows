@@ -3,12 +3,7 @@ name: Reusable Test Workflow
 on:
   workflow_call:
     inputs:
-      aws_access_key_id:
-        required: true
-        type: secrets
-      aws_secret_access_key:
-        required: true
-        type: secrets
+      
       aws_region:
         required: true
         type: string
@@ -18,6 +13,11 @@ on:
       s3_object_key:
         required: true
         type: string
+    secrets:
+      aws_access_key_id:
+        required: true
+      aws_secret_access_key:
+        required: true
 
 jobs:
   test:
