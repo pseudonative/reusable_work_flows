@@ -1,31 +1,35 @@
-name: TESTING
+name: Reusable Test Workflow
 
 on:
   workflow_call:
     inputs:
-      awsRegion:
+      aws_access_key_id:
+        required: true
+        type: secrets
+      aws_secret_access_key:
+        required: true
+        type: secrets
+      aws_region:
         required: true
         type: string
-      branchName:
+      s3_bucket_name:
         required: true
         type: string
-    secrets:
-      awsAccessKeyId:
+      s3_object_key:
         required: true
-      awsSecretAccessKey:
-        required: true
+        type: string
 
 jobs:
   test:
     runs-on: ubuntu-latest
-    steps:  
+    steps:
       - name: Checkout Repo
         uses: actions/checkout@v2
         with:
-          ref: ${{ github.event.inputs.branchName }}
-  
+          ref: ${{ github.ref_name }}
+          
       - name: Write branch name to a file
-        run: echo ${{ github.event.inputs.branchName }} > BRANCH_NAME
+        run: echo ${{ github.ref_name }} > BRANCH_NAME
         
       - name: Archive branch name file
         uses: actions/upload-artifact@v2
@@ -33,13 +37,13 @@ jobs:
           name: branch-name
           path: BRANCH_NAME
 
-      - name: Config AWS
+      - name: Configure AWS Credentials
         uses: aws-actions/configure-aws-credentials@v1
         with:
-          aws-access-key-id: ${{ secrets.GHUB_ACTIONS_KEY_ID }}
-          aws-secret-access-key: ${{ secrets.awsSecretAccessKey }}
-          aws-region: ${{ github.event.inputs.awsRegion }}
+          aws-access-key-id: ${{ inputs.aws_access_key_id }}
+          aws-secret-access-key: ${{ inputs.aws_secret_access_key }}
+          aws-region: ${{ inputs.aws_region }}
 
       - name: Verify S3 File
         run: |
-          aws s3api head-object --bucket jeremy-code-deploy-dev-useast1 --key api/v2.0.0/api.zip
+          aws s3api head-object --bucket ${{ inputs.s3_bucket_name }} --key ${{ inputs.s3_object_key }}
