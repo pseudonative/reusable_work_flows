@@ -8,10 +8,10 @@ on:
         type: string
       aws-access-key-id:
         required: true
-        type: secret
+        type: string
       aws-secret-access-key:
         required: true
-        type: secret
+        type: string
       aws-region:
         required: true
         type: string
