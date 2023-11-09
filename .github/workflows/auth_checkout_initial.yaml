@@ -6,15 +6,17 @@ on:
       ref:
         required: true
         type: string
-      aws-access-key-id:
-        required: true
-        type: string
-      aws-secret-access-key:
-        required: true
-        type: string
       aws-region:
         required: true
         type: string
+    secrets:
+      aws-access-key-id:
+        required: true
+        # type: string
+      aws-secret-access-key:
+        required: true
+        # type: string
+      
 
 jobs:
   setup:
@@ -28,6 +30,6 @@ jobs:
       - name: config aws
         uses: aws-actions/configure-aws-credentials@v1
         with:
-          aws-access-key-id: ${{ inputs.aws-access-key-id }}
-          aws-secret-access-key: ${{ inputs.aws-secret-access-key }}
+          aws-access-key-id: ${{ secrets.aws-access-key-id }}
+          aws-secret-access-key: ${{ secrets.aws-secret-access-key }}
           aws-region: ${{ inputs.aws-region }}
