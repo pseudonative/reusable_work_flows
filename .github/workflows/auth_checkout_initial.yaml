@@ -1,0 +1,33 @@
+name: Reusable Setup
+
+on:
+  workflow_call:
+    inputs:
+      ref:
+        required: true
+        type: string
+      aws-access-key-id:
+        required: true
+        type: secret
+      aws-secret-access-key:
+        required: true
+        type: secret
+      aws-region:
+        required: true
+        type: string
+
+jobs:
+  setup:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout Repo
+        uses: actions/checkout@v2
+        with:
+          ref: ${{ inputs.ref }}
+
+      - name: config aws
+        uses: aws-actions/configure-aws-credentials@v1
+        with:
+          aws-access-key-id: ${{ inputs.aws-access-key-id }}
+          aws-secret-access-key: ${{ inputs.aws-secret-access-key }}
+          aws-region: ${{ inputs.aws-region }}
