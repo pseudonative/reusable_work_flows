@@ -1,44 +1,63 @@
-name: 'My Composite Action'
-description: 'Configures AWS credentials and performs additional steps'
+name: 'Reusable Workflow Steps'
+description: 'Composite steps for setting up environment and preparing build artifacts'
+
 inputs:
-  aws-access-key-id:
-    description: 'AWS Access Key ID'
+  workflow_file:
+    description: 'Name of the workflow file to download artifacts from'
     required: true
-  aws-secret-access-key:
-    description: 'AWS Secret Access Key'
+  artifact_name:
+    description: 'Name of the artifact to download'
     required: true
-  aws-region:
-    description: 'AWS Region'
+  artifact_path:
+    description: 'Path to download the artifact to'
     required: true
-  # Add other inputs as needed
+  aws_region:
+    description: 'AWS region for the configured credentials'
+    required: true
+
+outputs:
+  branch_name:
+    description: "The name of the branch extracted from the artifact"
+    value: ${{ steps.set_outputs.outputs.branch_name }}
+  artifact_path:
+    description: "The path where the artifact is downloaded"
+    value: ${{ steps.set_outputs.outputs.artifact_path }}
 
 runs:
   using: "composite"
   steps:
+    - name: Download Plan Artifact
+      id: download_artifact
+      uses: dawidd6/action-download-artifact@v2
+      with:
+        workflow: ${{ inputs.workflow_file }}
+        name: ${{ inputs.artifact_name }}
+        workflow_conclusion: success
+        github_token: ${{ secrets.GITHUB_TOKEN }}
+        path: ${{ inputs.artifact_path }}
+
+    - name: Setup Environment Variables
+      id: setup_env
+      run: echo "BRANCH_NAME=$(cat ${{ inputs.artifact_path }}/${{ inputs.artifact_name }})" >> $GITHUB_ENV
+      shell: bash
+
+    - name: Checkout Repo
+      id: checkout
+      uses: actions/checkout@v2
+      with:
+        ref: ${{ env.BRANCH_NAME }}
+
     - name: Configure AWS Credentials
+      id: aws_creds
       uses: aws-actions/configure-aws-credentials@v1
       with:
         aws-access-key-id: ${{ secrets.GHUB_ACTIONS_KEY_ID }}
-        aws-secret-access-key: ${{ secrets.GHUB_ACTIONS_ACCESS_KE }}
-        aws-region: ${{ inputs.aws-region }}
+        aws-secret-access-key: ${{ secrets.GHUB_ACTIONS_ACCESS_KEY }}
+        aws-region: ${{ inputs.aws_region }}
 
-
-# name: 'Composite Setup'
-# description: 'Checkout and configure AWS credentials'
-
-# inputs:
-#   aws-region:
-#     description: 'AWS region for configuration'
-#     required: true
-
-# runs:
-#   using: 'composite'
-#   steps:
-#     # - name: Checkout Repo
-#     #   uses: actions/checkout@v2
-#     - name: config aws
-#       uses: aws-actions/configure-aws-credentials@v1
-#       with:
-#         aws-access-key-id: ${{ secrets.GHUB_ACTIONS_KEY_ID }}
-#         aws-secret-access-key: ${{ secrets.GHUB_ACTIONS_ACCESS_KEY }}
-#         aws-region: ${{ inputs.aws-region }}
+    - name: Set Outputs
+      id: set_outputs
+      run: |
+        echo "::set-output name=branch_name::$(cat ${{ inputs.artifact_path }}/${{ inputs.artifact_name }})"
+        echo "::set-output name=artifact_path::${{ inputs.artifact_path }}"
+      shell: bash
