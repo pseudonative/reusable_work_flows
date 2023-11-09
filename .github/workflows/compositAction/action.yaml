@@ -19,6 +19,6 @@ runs:
     - name: config aws
       uses: aws-actions/configure-aws-credentials@v1
       with:
-        aws-access-key-id: ${{ secrets.GHUB_ACTIONS_KEY_ID }}
-        aws-secret-access-key: ${{ secrets.GHUB_ACTIONS_ACCESS_KEY }}
+        aws-access-key-id: ${{ inputs.GHUB_ACTIONS_KEY_ID }}
+        aws-secret-access-key: ${{ inputs.GHUB_ACTIONS_ACCESS_KEY }}
         aws-region: ${{ inputs.aws-region }}
