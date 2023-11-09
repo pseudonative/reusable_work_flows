@@ -9,8 +9,8 @@ inputs:
 runs:
   using: 'composite'
   steps:
-    - name: Checkout Repo
-      uses: actions/checkout@v2
+    # - name: Checkout Repo
+    #   uses: actions/checkout@v2
     - name: config aws
       uses: aws-actions/configure-aws-credentials@v1
       with:
