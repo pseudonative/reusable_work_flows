@@ -58,7 +58,7 @@ runs:
 
     - name: Configure AWS Credentials
       id: aws_creds
-      uses: aws-actions/configure-aws-credentials@v1
+      uses: aws-actions/configure-aws-credentials@v4
       with:
         aws-access-key-id: ${{ inputs.aws_access_key_id }}
         aws-secret-access-key: ${{ inputs.aws_secret_access_key }}
@@ -69,4 +69,5 @@ runs:
       run: |
         echo "branch_name=$(cat ${{ inputs.artifact_path }}/${{ inputs.artifact_path }})" >> $GITHUB_ENV
         echo "artifact_path=${{ inputs.artifact_path }}" >> $GITHUB_ENV
+        echo "this is a test of github env" >> $GITHUB_ENV
       shell: bash
