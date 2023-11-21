@@ -72,3 +72,8 @@ runs:
         echo "testEnv=this is a test of github env" >> $GITHUB_ENV
         echo $testEnv
       shell: bash
+
+    - name: Use Test Environment Variable
+      run: |
+        echo "The value of testEnv is ${{ env.testEnv }}"
+      shell: bash
