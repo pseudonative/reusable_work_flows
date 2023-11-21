@@ -32,7 +32,7 @@ jobs:
         run: echo ${{ github.ref_name }} > BRANCH_NAME
         
       - name: Archive branch name file
-        uses: actions/upload-artifact@v2
+        uses: actions/upload-artifact@v3
         with:
           name: branch-name
           path: BRANCH_NAME
