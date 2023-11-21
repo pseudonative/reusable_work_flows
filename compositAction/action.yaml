@@ -69,5 +69,5 @@ runs:
       run: |
         echo "branch_name=$(cat ${{ inputs.artifact_path }}/${{ inputs.artifact_path }})" >> $GITHUB_ENV
         echo "artifact_path=${{ inputs.artifact_path }}" >> $GITHUB_ENV
-        echo "this is a test of github env" >> $GITHUB_ENV
+        echo "testEnv=this is a test of github env" >> $GITHUB_ENV
       shell: bash
