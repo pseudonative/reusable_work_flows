@@ -67,6 +67,6 @@ runs:
     - name: Set Outputs
       id: set_outputs
       run: |
-        echo "::set-output name=branch_name::$(cat ${{ inputs.artifact_path }}/${{ inputs.artifact_path }})"
-        echo "::set-output name=artifact_path::${{ inputs.artifact_path }}"
+        echo "branch_name=$(cat ${{ inputs.artifact_path }}/${{ inputs.artifact_path }})" >> $GITHUB_ENV
+        echo "artifact_path=${{ inputs.artifact_path }}" >> $GITHUB_ENV
       shell: bash
