@@ -58,7 +58,7 @@ runs:
 
     - name: Configure AWS Credentials
       id: aws_creds
-      uses: aws-actions/configure-aws-credentials@v4
+      uses: aws-actions/configure-aws-credentials@v1
       with:
         aws-access-key-id: ${{ inputs.aws_access_key_id }}
         aws-secret-access-key: ${{ inputs.aws_secret_access_key }}
@@ -67,6 +67,6 @@ runs:
     - name: Set Outputs
       id: set_outputs
       run: |
-        echo "::set-output name=branch_name::$(cat ${{ inputs.artifact_path }}/${{ inputs.artifact_name }})"
+        echo "::set-output name=branch_name::$(cat ${{ inputs.artifact_path }}/${{ inputs.artifact_path }})"
         echo "::set-output name=artifact_path::${{ inputs.artifact_path }}"
       shell: bash
