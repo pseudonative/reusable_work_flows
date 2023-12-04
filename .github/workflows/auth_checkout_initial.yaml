@@ -13,11 +13,10 @@ on:
       s3_object_key:
         required: true
         type: string
-    secrets:
-      aws_access_key_id:
+      aws_oidc_assume_role:
         required: true
-      aws_secret_access_key:
-        required: true
+        type: string
+ 
 
 jobs:
   test:
@@ -29,21 +28,17 @@ jobs:
           ref: ${{ github.ref_name }}
           
       - name: Write branch name to a file
-        run: echo ${{ github.ref_name }} > BRANCH_NAME
+        run: echo ${{ github.ref_name }} > BRANCH
         
       - name: Archive branch name file
         uses: actions/upload-artifact@v3
         with:
-          name: branch-name
-          path: BRANCH_NAME
+          name: branch
+          path: BRANCH
 
       - name: Configure AWS Credentials
         uses: aws-actions/configure-aws-credentials@v4
         with:
-          aws-access-key-id: ${{ secrets.aws_access_key_id }}
-          aws-secret-access-key: ${{ secrets.aws_secret_access_key }}
+          role-to-assume: ${{ inputs.aws_oidc_assume_role }}
           aws-region: ${{ inputs.aws_region }}
 
-      - name: Verify S3 File
-        run: |
-          aws s3api head-object --bucket ${{ inputs.s3_bucket_name }} --key ${{ inputs.s3_object_key }}
