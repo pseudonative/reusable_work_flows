@@ -1,0 +1,69 @@
+name: 'Terraform Plan Output'
+description: 'Composite steps to output Terraform Plan to github PR'
+
+inputs:
+  environment:
+    description: 'Environment'
+    required: true
+  github_token:
+    description: 'GitHub token for authentication'
+    required: true
+  stdout:
+    description: 'steps.plan.outputs.stdout'
+    required: true
+  stderr:
+    description: 'steps.plan.outputs.stderr'
+    required: true
+  stdout_or_stderr:
+    description: 'steps.plan.outputs.stdout || steps.plan.outputs.stderr'
+    required: true
+
+runs:
+  using: "composite"
+  steps:
+      - name: Plan Output for Github Comment
+        run: |
+          echo '${{ inputs.stdout_or_stderr }}' \
+          | sed -E 's/^([[:space:]]+)([-+])/\2\1/g' > plan.txt
+        shell: bash
+
+      - name: Plan Env
+        run: |
+          PLAN=$(cat plan.txt)
+          echo "PLAN<<EOF" >> $GITHUB_ENV
+          echo "$PLAN" >> $GITHUB_ENV
+          echo "EOF" >> $GITHUB_ENV
+        shell: bash
+
+      - name: Post Plan and Apply to GitHub PR
+        uses: mshick/add-pr-comment@v2
+        with:
+          repo-token: ${{ inputs.github_token }}
+          allow-repeats: true
+          message: |
+            Terraform Plan **${{ inputs.environment }} **:
+
+            ```diff
+            ${{ env.PLAN }} 
+            ```
+  
+            ```
+            ${{ inputs.stdout }} 
+            ```
+      - name: Post Plan Failure
+        if: steps.plan.outcome == 'failure'
+        uses: mshick/add-pr-comment@v2
+        with:
+          repo-token: ${{ inputs.github_token }} 
+          message: |
+            Plan failed for **${{ inputs.environment }}**:
+  
+            ```
+            ${{ inputs.stderr }} 
+            ```
+      
+      - name: Archive Plan File
+        uses: actions/upload-artifact@v3
+        with:
+          name: plan
+          path: terraform/apply/${{ inputs.environment }}/plan.tfout
