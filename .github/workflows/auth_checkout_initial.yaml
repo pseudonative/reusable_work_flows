@@ -13,11 +13,6 @@ on:
  
 jobs:
   test:
-    permissions:
-        id-token: write
-        contents: read
-        pull-requests: write
-        statuses: write
     runs-on: ubuntu-latest
     steps:
       - name: Checkout Repo
