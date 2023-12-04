@@ -17,11 +17,8 @@ inputs:
   github_token:
     description: 'GitHub token for authentication'
     required: true
-  aws_access_key_id:
-    description: 'AWS access key ID'
-    required: true
-  aws_secret_access_key:
-    description: 'AWS secret access key'
+  aws_oidc_assume_role:
+    description: 'AWS access OIDC'
     required: true
 
 outputs:
@@ -47,21 +44,20 @@ runs:
 
     - name: Setup Environment Variables
       id: setup_env
-      run: echo "BRANCH_NAME=$(cat ${{ inputs.artifact_path }}/${{ inputs.artifact_name }})" >> $GITHUB_ENV
+      run: echo "BRANCH=$(cat ${{ inputs.artifact_path }}/${{ inputs.artifact_name }})" >> $GITHUB_ENV
       shell: bash
 
     - name: Checkout Repo
       id: checkout
       uses: actions/checkout@v4
       with:
-        ref: ${{ env.BRANCH_NAME }}
+        ref: ${{ env.BRANCH }}
 
     - name: Configure AWS Credentials
       id: aws_creds
       uses: aws-actions/configure-aws-credentials@v4
       with:
-        aws-access-key-id: ${{ inputs.aws_access_key_id }}
-        aws-secret-access-key: ${{ inputs.aws_secret_access_key }}
+        role-to-assume: ${{ inputs.aws_oidc_assume_role }}
         aws-region: ${{ inputs.aws_region }}
 
     - name: Set Outputs
