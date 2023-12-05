@@ -65,16 +65,4 @@ runs:
       with:
         terraform_version: 1.5.0
 
-    - name: Set Outputs
-      id: set_outputs
-      run: |
-        echo "branch_name=$(cat ${{ inputs.artifact_path }}/${{ inputs.artifact_path }})" >> $GITHUB_ENV
-        echo "artifact_path=${{ inputs.artifact_path }}" >> $GITHUB_ENV
-        echo "testEnv=this is a test of github env" >> $GITHUB_ENV
-        echo $testEnv
-      shell: bash
 
-    - name: Use Test Environment Variable
-      run: |
-        echo "The value of testEnv is ${{ env.testEnv }}"
-      shell: bash
