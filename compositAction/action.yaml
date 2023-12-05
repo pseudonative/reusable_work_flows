@@ -60,6 +60,11 @@ runs:
         role-to-assume: ${{ inputs.aws_oidc_assume_role }}
         aws-region: ${{ inputs.aws_region }}
 
+    - name: Set Up TF 
+      uses: hashicorp/setup-terraform@v2
+      with:
+        terraform_version: 1.5.0
+
     - name: Set Outputs
       id: set_outputs
       run: |
