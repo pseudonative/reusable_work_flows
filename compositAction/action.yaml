@@ -21,14 +21,6 @@ inputs:
     description: 'AWS access OIDC'
     required: true
 
-outputs:
-  branch_name:
-    description: "The name of the branch extracted from the artifact"
-    value: ${{ steps.set_outputs.outputs.branch_name }}
-  artifact_path:
-    description: "The path where the artifact is downloaded"
-    value: ${{ steps.set_outputs.outputs.artifact_path }}
-
 runs:
   using: "composite"
   steps:
