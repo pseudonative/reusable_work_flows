@@ -7,18 +7,13 @@ on:
       aws_region:
         required: true
         type: string
-    secrets:
+    
       aws_oidc_assume_role:
         required: true
-        
+        type: string
  
 jobs:
   test:
-    permissions:
-      id-token: write
-      contents: read
-      pull-requests: write
-      statuses: write
     runs-on: ubuntu-latest
     steps:
       - name: Checkout Repo
@@ -38,6 +33,6 @@ jobs:
       - name: Configure AWS Credentials
         uses: aws-actions/configure-aws-credentials@v4
         with:
-          role-to-assume: ${{ secrets.aws_oidc_assume_role }}
+          role-to-assume: ${{ inputs.aws_oidc_assume_role }}
           aws-region: ${{ inputs.aws_region }}
 
