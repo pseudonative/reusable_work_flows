@@ -14,9 +14,17 @@ inputs:
 
 runs:
   using: "composite"
-  steps:
-    - name: see if secret is coming through
-      run: echo "${{ inputs.aws_oidc_assume_role }}"
+  steps:  
+    - name: Set env variable
+      run: |
+        if [ -z "${{ inputs.aws_oidc_assume_role }}" ]; then
+          echo "Secret is not set."
+          exit 1
+        else
+          echo "Secret is set."
+        fi
+      env:
+        SECRET_ENV: ${{ inputs.aws_oidc_assume_role }}
       shell: bash
 
     - uses: actions/checkout@v4
