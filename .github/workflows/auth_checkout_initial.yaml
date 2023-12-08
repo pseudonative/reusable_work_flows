@@ -11,9 +11,9 @@ on:
       #   required: true
       #   type: string
     # secrets:
-      oidc_role:
-        required: true
-        type: string
+      # oidc_role:
+      #   required: true
+      #   type: string
  
 jobs:
   test:
@@ -37,5 +37,5 @@ jobs:
         uses: aws-actions/configure-aws-credentials@v4
         with:
           aws-region: ${{ inputs.aws_region }}
-          role-to-assume: ${{ inputs.oidc_role}}
+          role-to-assume: ${{ secrets.OIDC_ROLE }}
 
