@@ -10,10 +10,10 @@ on:
       # aws_oidc_assume_role:
       #   required: true
       #   type: string
-    # secrets:
-      # oidc_role:
-      #   required: true
-      #   type: string
+    secrets:
+      OIDC_ROLE:
+        required: true
+        # type: string
  
 jobs:
   test:
