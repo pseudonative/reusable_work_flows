@@ -34,6 +34,6 @@ jobs:
         uses: aws-actions/configure-aws-credentials@v4
         with:
           aws-region: ${{ inputs.aws_region }}
-          role-to-assume: ${{ secrets.aws_oidc_assume_role }}
-          # role-to-assume: ${{ secrets.OIDC ROLE}}
+          # role-to-assume: ${{ secrets.aws_oidc_assume_role }}
+          role-to-assume: ${{ secrets.OIDC ROLE}}
 
