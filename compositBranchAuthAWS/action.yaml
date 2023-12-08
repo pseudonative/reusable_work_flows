@@ -5,7 +5,7 @@ inputs:
   aws_region:
     description: 'AWS region to configure'
     required: true
-  OIDC_ROLE:
+  aws_oidc_assume_role:
     description: 'The OIDC role to assume'
     required: true
   branch:
@@ -32,4 +32,4 @@ runs:
       uses: aws-actions/configure-aws-credentials@v4
       with:
         aws-region: ${{ inputs.aws_region }}
-        role-to-assume: ${{ inputs.OIDC_ROLE }}
+        role-to-assume: ${{ inputs.aws_oidc_assume_role }}
