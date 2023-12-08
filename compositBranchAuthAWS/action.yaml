@@ -16,7 +16,7 @@ runs:
   using: "composite"
   steps:
     - name: see if secret is coming through
-      run: echo "${{ inputs.aws_oidc_assume_role }}""
+      run: echo "${{ inputs.aws_oidc_assume_role }}"
       shell: bash
 
     - uses: actions/checkout@v4
