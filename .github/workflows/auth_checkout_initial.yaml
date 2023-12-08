@@ -7,9 +7,9 @@ on:
       aws_region:
         required: true
         type: string
-      aws_oidc_assume_role:
-        required: true
-        type: string
+      # aws_oidc_assume_role:
+      #   required: true
+      #   type: string
     secrets:
         oidc_role:
           required: true
