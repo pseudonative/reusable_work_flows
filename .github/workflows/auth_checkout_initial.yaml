@@ -3,13 +3,14 @@ name: Reusable Test Workflow
 on:
   workflow_call:
     inputs:
-      
       aws_region:
         required: true
         type: string
-      # aws_oidc_assume_role:
-      #   required: true
-      #   type: string
+    
+      ref_branch:
+        required: true
+        type: string
+    
     secrets:
       OIDC_ROLE:
         required: true
@@ -22,10 +23,10 @@ jobs:
       - name: Checkout Repo
         uses: actions/checkout@v4
         with:
-          ref: ${{ github.ref_name }}
+          ref: ${{ inputs.ref_branch }}
           
       - name: Write branch name to a file
-        run: echo ${{ github.ref_name }} > BRANCH
+        run: echo ${{ inputs.ref_branch }} > BRANCH
         
       - name: Archive branch name file
         uses: actions/upload-artifact@v3
