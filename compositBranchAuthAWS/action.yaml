@@ -1,0 +1,32 @@
+name: 'Branch Set up and AWS Auth'
+description: 'Composite steps to set branch and auth into AWS'
+
+inputs:
+  aws_region:
+    description: 'AWS region to configure'
+    required: true
+  OIDC_ROLE:
+    description: 'The OIDC role to assume'
+    required: true
+
+runs:
+  using: "composite"
+  steps:
+    - uses: actions/checkout@v4
+      with:
+        ref: ${{{ github.ref_name }}}
+          
+    - name: Write branch name to a file
+      run: echo ${{ github.ref_name }} > BRANCH
+      shell: bash
+      
+    - name: Archive branch name file
+      uses: actions/upload-artifact@v3
+      with:
+        name: branch
+        path: BRANCH
+    - name: Configure AWS Credentials
+      uses: aws-actions/configure-aws-credentials@v4
+      with:
+        aws-region: ${{ inputs.aws_region }}
+        role-to-assume: ${{ inputs.OIDC_ROLE }}
