@@ -8,16 +8,19 @@ inputs:
   OIDC_ROLE:
     description: 'The OIDC role to assume'
     required: true
+  branch:
+    description: 'branch reference'
+    required: true
 
 runs:
   using: "composite"
   steps:
     - uses: actions/checkout@v4
       with:
-        ref: ${{{ github.ref_name }}}
+        ref: ${{ inputs.branch }}
           
     - name: Write branch name to a file
-      run: echo ${{ github.ref_name }} > BRANCH
+      run: echo ${{ inputs.branch }} > BRANCH
       shell: bash
       
     - name: Archive branch name file
