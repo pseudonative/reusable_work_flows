@@ -17,7 +17,7 @@ on:
         # type: string
  
 jobs:
-  test:
+  Branch_AWS:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout Repo
